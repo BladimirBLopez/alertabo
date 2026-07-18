@@ -1,4 +1,3 @@
-cat > js/buscador.js << 'EOF'
 /**
  * buscador.js
  * Controla el buscador del hero: selector de tipo (WhatsApp/Facebook),
@@ -102,4 +101,3 @@ cat > js/buscador.js << 'EOF'
     setInterval(ciclarVistaPrevia, 3200);
   }
 })();
-EOF

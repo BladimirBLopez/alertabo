@@ -1,4 +1,3 @@
-cat > js/reportes-recientes.js << 'EOF'
 /**
  * reportes-recientes.js
  * Consume /api/busqueda/recientes y renderiza las tarjetas de la sección
@@ -47,4 +46,3 @@ cat > js/reportes-recientes.js << 'EOF'
 
   cargarReportesRecientes();
 })();
-EOF

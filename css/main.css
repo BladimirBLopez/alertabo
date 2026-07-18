@@ -1,4 +1,3 @@
-cat > css/main.css << 'EOF'
 /* =====================================================================
    ALERTABO — ESTILOS GLOBALES
    ===================================================================== */
@@ -255,4 +254,3 @@ h1, h2, h3, h4 {
   .pie__grid { grid-template-columns: 1fr 1fr; }
   .nav-principal__enlaces { display: none; }
 }
-EOF

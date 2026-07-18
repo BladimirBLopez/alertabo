@@ -1,4 +1,3 @@
-cat > js/utilidades.js << 'EOF'
 /**
  * utilidades.js
  * Funciones compartidas por todo el frontend de AlertaBo.
@@ -82,4 +81,3 @@ const AlertaBoUtils = (function () {
     ETIQUETAS_RIESGO,
   };
 })();
-EOF

@@ -1,4 +1,3 @@
-cat > js/faq.js << 'EOF'
 /**
  * faq.js
  * Acordeón simple y accesible para la sección de preguntas frecuentes.
@@ -25,4 +24,3 @@ cat > js/faq.js << 'EOF'
     });
   });
 })();
-EOF

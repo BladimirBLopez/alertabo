@@ -1,4 +1,3 @@
-cat > css/inicio.css << 'EOF'
 /* =====================================================================
    ALERTABO — ESTILOS DE PÁGINA DE INICIO
    ===================================================================== */
@@ -379,4 +378,3 @@ cat > css/inicio.css << 'EOF'
   .hero__titulo { font-size: var(--text-3xl); }
   .pasos, .reportes-recientes { grid-template-columns: 1fr; }
 }
-EOF
