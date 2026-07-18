@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado de búsqueda — AlertaBo</title>
+  <meta name="description" content="Consulta reportes de la comunidad sobre un número de WhatsApp o una página de Facebook.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/resultado.css">
+</head>
+<body>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__barra">
+      <a href="index.html" class="logo">AlertaBo<span class="logo__marca-punto">.</span></a>
+      <nav class="nav-principal">
+        <div class="nav-principal__enlaces">
+          <a href="index.html#como-funciona">Cómo funciona</a>
+          <a href="index.html#reportes-recientes">Últimos reportes</a>
+          <a href="index.html#faq">Preguntas frecuentes</a>
+        </div>
+        <div class="encabezado__acciones">
+          <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema claro/oscuro">
+            <i data-lucide="moon" width="18" height="18"></i>
+          </button>
+          <a href="reportar.html" class="boton boton--secundario">Reportar experiencia</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="aviso-legal">
+    <div class="contenedor aviso-legal__texto">
+      <i data-lucide="info" width="16" height="16" class="aviso-legal__icono"></i>
+      <p>
+        La información publicada corresponde a reportes enviados por usuarios y revisados por
+        el equipo de moderación. No constituye una resolución oficial ni una acusación definitiva.
+        Se recomienda verificar la información antes de tomar decisiones.
+      </p>
+    </div>
+  </div>
+
+  <main class="resultado">
+    <div class="contenedor">
+      <a href="index.html" class="resultado__volver">
+        <i data-lucide="arrow-left" width="16" height="16"></i>
+        Volver al inicio
+      </a>
+
+      <div id="contenidoResultado">
+        <div class="resultado__cargando">Buscando reportes…</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie__inferior">
+        <span>© 2026 AlertaBo. Todos los derechos reservados.</span>
+        <span>Hecho en Bolivia 🇧🇴</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/tema.js"></script>
+  <script src="js/utilidades.js"></script>
+  <script src="js/resultado.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  </script>
+</body>
+</html>

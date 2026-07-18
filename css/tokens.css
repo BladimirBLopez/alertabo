@@ -1,0 +1,106 @@
+cat > css/tokens.css << 'EOF'
+/* =====================================================================
+   ALERTABO — DESIGN TOKENS
+   ===================================================================== */
+
+:root {
+  /* ---- Tipografía ---- */
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* ---- Escala tipográfica ---- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 3.75rem;
+
+  /* ---- Espaciado ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ---- Radios ---- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* ---- Sombras ---- */
+  --shadow-sm: 0 1px 2px rgba(11, 15, 20, 0.06);
+  --shadow-md: 0 8px 24px rgba(11, 15, 20, 0.08);
+  --shadow-lg: 0 16px 48px rgba(11, 15, 20, 0.14);
+
+  /* ---- Transiciones ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms var(--ease);
+  --transition-base: 260ms var(--ease);
+  --transition-slow: 420ms var(--ease);
+
+  /* ---- Marca: azul "verificación" ---- */
+  --brand-50:  #eef4ff;
+  --brand-200: #b9d0ff;
+  --brand-400: #5b8def;
+  --brand-500: #3b6fe0;
+  --brand-600: #2c56c2;
+  --brand-700: #21419a;
+
+  /* ---- Estados de riesgo ---- */
+  --risk-safe-bg: #e7f6ef;
+  --risk-safe-fg: #157a52;
+  --risk-safe-dot: #1fa971;
+
+  --risk-warn-bg: #fff3e0;
+  --risk-warn-fg: #a9600a;
+  --risk-warn-dot: #f5a623;
+
+  --risk-high-bg: #fdeeee;
+  --risk-high-fg: #b23a3a;
+  --risk-high-dot: #e2564f;
+
+  /* ---- Modo claro (default) ---- */
+  --bg: #f7f8fa;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #eef0f3;
+  --border: #e2e5ea;
+  --text-primary: #12151a;
+  --text-secondary: #565c66;
+  --text-tertiary: #8b909b;
+}
+
+/* ---- Modo oscuro ---- */
+[data-theme="dark"] {
+  --bg: #0b0d10;
+  --bg-elevated: #14171c;
+  --bg-subtle: #1a1e24;
+  --border: #262b33;
+  --text-primary: #f2f3f5;
+  --text-secondary: #a6acb8;
+  --text-tertiary: #6b7280;
+
+  --risk-safe-bg: rgba(31, 169, 113, 0.12);
+  --risk-safe-fg: #4fd39a;
+
+  --risk-warn-bg: rgba(245, 166, 35, 0.12);
+  --risk-warn-fg: #f5a623;
+
+  --risk-high-bg: rgba(226, 86, 79, 0.12);
+  --risk-high-fg: #f08880;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+EOF

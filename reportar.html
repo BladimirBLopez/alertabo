@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportar experiencia — AlertaBo</title>
+  <meta name="description" content="Comparte tu experiencia sobre un número de WhatsApp o una página de Facebook para ayudar a la comunidad.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/reportar.css">
+</head>
+<body>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__barra">
+      <a href="index.html" class="logo">AlertaBo<span class="logo__marca-punto">.</span></a>
+      <nav class="nav-principal">
+        <div class="nav-principal__enlaces">
+          <a href="index.html#como-funciona">Cómo funciona</a>
+          <a href="index.html#reportes-recientes">Últimos reportes</a>
+          <a href="index.html#faq">Preguntas frecuentes</a>
+        </div>
+        <div class="encabezado__acciones">
+          <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema claro/oscuro">
+            <i data-lucide="moon" width="18" height="18"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="aviso-legal">
+    <div class="contenedor aviso-legal__texto">
+      <i data-lucide="info" width="16" height="16" class="aviso-legal__icono"></i>
+      <p>
+        La información publicada corresponde a reportes enviados por usuarios y revisados por
+        el equipo de moderación. No constituye una resolución oficial ni una acusación definitiva.
+        Se recomienda verificar la información antes de tomar decisiones.
+      </p>
+    </div>
+  </div>
+
+  <main class="pagina-reportar">
+    <div class="contenedor">
+      <div class="pagina-reportar__cabecera">
+        <h1>Reporta tu experiencia</h1>
+        <p>Tu reporte será revisado por el equipo de moderación antes de publicarse. No es una acusación, es información para la comunidad.</p>
+      </div>
+
+      <div id="contenedorFormulario">
+        <form class="formulario-reporte" id="formReporte" novalidate>
+
+          <div class="campo-form">
+            <label for="campoNombreNegocio">Nombre del negocio <span class="opcional">(opcional)</span></label>
+            <input type="text" id="campoNombreNegocio" maxlength="120" placeholder="Ej: Tienda XYZ">
+          </div>
+
+          <div class="campo-form">
+            <label for="campoWhatsapp">Número de WhatsApp</label>
+            <input type="text" id="campoWhatsapp" inputmode="tel" placeholder="Ej: 591 700 12345">
+            <p class="campo-form__ayuda">Ingresa al menos uno: WhatsApp o Facebook.</p>
+          </div>
+
+          <div class="campo-form">
+            <label for="campoFacebook">URL de Facebook <span class="opcional">(opcional)</span></label>
+            <input type="text" id="campoFacebook" inputmode="url" placeholder="Ej: facebook.com/mitienda">
+          </div>
+
+          <div class="campo-form">
+            <label for="campoCiudad">Ciudad</label>
+            <input type="text" id="campoCiudad" maxlength="80" placeholder="Ej: Santa Cruz de la Sierra" required>
+          </div>
+
+          <div class="campo-form">
+            <label for="campoMotivo">Motivo del reporte</label>
+            <select id="campoMotivo">
+              <option value="No entrega el producto">No entrega el producto</option>
+              <option value="Cobro duplicado">Cobro duplicado</option>
+              <option value="Producto distinto al ofrecido">Producto distinto al ofrecido</option>
+              <option value="No responde tras el pago">No responde tras el pago</option>
+              <option value="Precios engañosos">Precios engañosos</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="campo-form">
+            <label for="campoDescripcion">Descripción de lo ocurrido</label>
+            <textarea id="campoDescripcion" maxlength="1500" placeholder="Describe qué pasó, con el mayor detalle posible…" required></textarea>
+          </div>
+
+          <div class="campo-form">
+            <label>¿Hubo pérdida económica?</label>
+            <div class="radio-grupo">
+              <label class="radio-opcion">
+                <input type="radio" name="hubo_perdida" value="si">
+                Sí
+              </label>
+              <label class="radio-opcion">
+                <input type="radio" name="hubo_perdida" value="no" checked>
+                No
+              </label>
+            </div>
+          </div>
+
+          <div class="campo-form" id="grupoMontoPerdido" style="display:none;">
+            <label for="campoMonto">Monto perdido en Bs. <span class="opcional">(opcional)</span></label>
+            <input type="number" id="campoMonto" min="0" step="0.01" placeholder="Ej: 250">
+          </div>
+
+          <div class="campo-form">
+            <label>Capturas de pantalla <span class="opcional">(opcional, máx. 3)</span></label>
+            <div class="zona-capturas" id="zonaCapturas">
+              <div class="zona-capturas__icono">
+                <i data-lucide="image-plus" width="24" height="24"></i>
+              </div>
+              <p>Toca para elegir imágenes desde tu galería</p>
+            </div>
+            <input type="file" id="inputCapturas" accept="image/*" multiple hidden>
+            <div class="previa-capturas" id="previaCapturas"></div>
+          </div>
+
+          <!-- Honeypot anti-spam: campo oculto, invisible para humanos -->
+          <div class="campo-trampa">
+            <label for="campoTrampa">No llenar este campo</label>
+            <input type="text" id="campoTrampa" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="campo-terminos">
+            <input type="checkbox" id="campoTerminos">
+            <label for="campoTerminos">
+              Acepto los <a href="terminos.html" target="_blank">términos de uso</a> y confirmo que la información
+              proporcionada es verídica según mi experiencia.
+            </label>
+          </div>
+
+          <p class="campo-form__error" id="errorGeneralForm"></p>
+
+          <button type="submit" class="boton boton--primario boton--ancho-completo" id="botonEnviarReporte">
+            Enviar reporte
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie__inferior">
+        <span>© 2026 AlertaBo. Todos los derechos reservados.</span>
+        <span>Hecho en Bolivia 🇧🇴</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/tema.js"></script>
+  <script src="js/utilidades.js"></script>
+  <script src="js/reportar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  </script>
+</body>
+</html>
