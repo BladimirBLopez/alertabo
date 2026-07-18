@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dashboard — AlertaBo Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__barra">
+      <span class="logo">AlertaBo<span class="logo__marca-punto">.</span> Admin</span>
+      <div class="encabezado__acciones">
+        <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema"><i data-lucide="moon" width="18" height="18"></i></button>
+        <button class="boton boton--secundario" id="botonLogout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="panel">
+    <div class="contenedor">
+      <div class="panel__cabecera">
+        <h1>Panel de moderación</h1>
+      </div>
+
+      <div class="tarjetas-stats" id="tarjetasStats">
+        <div class="tarjeta-stat"><div class="tarjeta-stat__valor">—</div><div class="tarjeta-stat__label">Total</div></div>
+        <div class="tarjeta-stat tarjeta-stat--pendientes"><div class="tarjeta-stat__valor">—</div><div class="tarjeta-stat__label">Pendientes</div></div>
+        <div class="tarjeta-stat tarjeta-stat--aprobados"><div class="tarjeta-stat__valor">—</div><div class="tarjeta-stat__label">Aprobados</div></div>
+        <div class="tarjeta-stat tarjeta-stat--rechazados"><div class="tarjeta-stat__valor">—</div><div class="tarjeta-stat__label">Rechazados</div></div>
+      </div>
+
+      <div class="filtros">
+        <select id="filtroEstado">
+          <option value="pendiente">Pendientes</option>
+          <option value="aprobado">Aprobados</option>
+          <option value="rechazado">Rechazados</option>
+          <option value="">Todos</option>
+        </select>
+        <input type="text" id="filtroBusqueda" placeholder="Buscar por WhatsApp, Facebook o negocio…">
+      </div>
+
+      <div class="lista-admin" id="listaAdmin">
+        <div class="estado-vacio-admin">Cargando reportes…</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal de edición -->
+  <div class="modal-fondo" id="modalEditar">
+    <div class="modal-caja">
+      <h3>Editar reporte</h3>
+      <input type="hidden" id="editarId">
+      <label for="editarNombreNegocio">Nombre del negocio</label>
+      <input type="text" id="editarNombreNegocio">
+      <label for="editarCiudad">Ciudad</label>
+      <input type="text" id="editarCiudad">
+      <label for="editarMotivo">Motivo</label>
+      <input type="text" id="editarMotivo">
+      <label for="editarDescripcion">Descripción</label>
+      <textarea id="editarDescripcion" rows="4"></textarea>
+      <div class="modal-caja__acciones">
+        <button class="boton boton--secundario boton--ancho-completo" id="botonCancelarEditar">Cancelar</button>
+        <button class="boton boton--primario boton--ancho-completo" id="botonGuardarEditar">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/tema.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  </script>
+</body>
+</html>
