@@ -11,8 +11,8 @@ module.exports = {
     'Precios engañosos',
     'Otro',
   ],
-  LIMITE_IMAGENES_POR_REPORTE: 3,
-  TAMANO_MAX_IMAGEN_BYTES: 4 * 1024 * 1024, // 4MB por imagen
+  LIMITE_IMAGENES_POR_REPORTE: 2,
+  TAMANO_MAX_IMAGEN_BYTES: 1.5 * 1024 * 1024, // 1.5MB por imagen YA COMPRIMIDA (respaldo del backend)
   VENTANA_RATE_LIMIT_MINUTOS: 10,
   MAX_REPORTES_POR_IP_EN_VENTANA: 3,
 };

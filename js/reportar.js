@@ -1,8 +1,13 @@
 /**
  * reportar.js
  * Controla el formulario de reporte: prellenado desde la URL,
- * validación en cliente, previsualización de capturas (convertidas
- * a base64), y envío a /api/reportes/crear.
+ * validación en cliente, compresión + previsualización de capturas,
+ * y envío a /api/reportes/crear.
+ *
+ * IMPORTANTE: las imágenes se REDIMENSIONAN Y COMPRIMEN en el navegador
+ * (canvas, salida JPEG) antes de convertirlas a base64. Vercel tiene un
+ * límite duro de 4.5MB por request en sus funciones serverless — sin
+ * esta compresión, una sola foto de celular sin editar ya rompe el envío.
  */
 (function () {
   const form = document.getElementById('formReporte');
@@ -31,7 +36,6 @@
     campoFacebook.value = valorPrellenado;
   }
 
-  // ---- Mostrar/ocultar campo de monto según radio Sí/No ----
   document.querySelectorAll('input[name="hubo_perdida"]').forEach((radio) => {
     radio.addEventListener('change', () => {
       camposMonto.style.display = radio.value === 'si' && radio.checked ? 'block' : camposMonto.style.display;
@@ -39,8 +43,12 @@
     });
   });
 
-  // ---- Capturas: selección y previsualización ----
-  const MAX_CAPTURAS = 3;
+  // ---- Capturas: máximo 2, comprimidas a ~1280px de lado mayor, JPEG 70% ----
+  const MAX_CAPTURAS = 2;
+  const DIMENSION_MAXIMA = 1280;
+  const CALIDAD_JPEG = 0.7;
+  const TAMANO_MAX_ORIGINAL_BYTES = 12 * 1024 * 1024; // descarta fotos absurdamente pesadas antes de procesarlas
+
   let capturasSeleccionadas = [];
 
   zonaCapturas.addEventListener('click', () => inputCapturas.click());
@@ -50,20 +58,56 @@
     for (const archivo of archivos) {
       if (capturasSeleccionadas.length >= MAX_CAPTURAS) break;
       if (!archivo.type.startsWith('image/')) continue;
-      if (archivo.size > 4 * 1024 * 1024) continue;
+      if (archivo.size > TAMANO_MAX_ORIGINAL_BYTES) continue;
 
-      const base64 = await leerComoBase64(archivo);
-      capturasSeleccionadas.push({ nombre: archivo.name, tipo: archivo.type, datos_base64: base64 });
+      try {
+        const base64 = await comprimirImagen(archivo, DIMENSION_MAXIMA, CALIDAD_JPEG);
+        capturasSeleccionadas.push({
+          nombre: archivo.name.replace(/\.\w+$/, '.jpg'),
+          tipo: 'image/jpeg',
+          datos_base64: base64,
+        });
+      } catch (error) {
+        console.error('[AlertaBo] No se pudo procesar la imagen:', error);
+      }
     }
     inputCapturas.value = '';
     renderizarPreviasCapturas();
   });
 
-  function leerComoBase64(archivo) {
+  /**
+   * Redimensiona una imagen al lado mayor indicado y la comprime como
+   * JPEG usando <canvas>, devolviendo el base64 resultante (sin el
+   * prefijo "data:image/jpeg;base64,").
+   */
+  function comprimirImagen(archivo, dimensionMaxima, calidad) {
     return new Promise((resolve, reject) => {
       const lector = new FileReader();
-      lector.onload = () => resolve(lector.result.split(',')[1]);
-      lector.onerror = reject;
+      lector.onload = (evento) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > dimensionMaxima || height > dimensionMaxima) {
+            if (width > height) {
+              height = Math.round(height * (dimensionMaxima / width));
+              width = dimensionMaxima;
+            } else {
+              width = Math.round(width * (dimensionMaxima / height));
+              height = dimensionMaxima;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', calidad);
+          resolve(dataUrl.split(',')[1]);
+        };
+        img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+        img.src = evento.target.result;
+      };
+      lector.onerror = () => reject(new Error('No se pudo leer el archivo'));
       lector.readAsDataURL(archivo);
     });
   }
@@ -84,7 +128,6 @@
     });
   }
 
-  // ---- Envío del formulario ----
   form.addEventListener('submit', async (evento) => {
     evento.preventDefault();
     ocultarErrorGeneral();
