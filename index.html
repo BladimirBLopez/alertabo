@@ -7,7 +7,6 @@
   <meta name="description" content="Revisa si un número de WhatsApp o una página de Facebook tiene reportes realizados por la comunidad, antes de comprar en Bolivia.">
   <link rel="canonical" href="https://alertabo.vercel.app/">
 
-  <!-- Open Graph / redes sociales -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AlertaBo">
   <meta property="og:title" content="AlertaBo — Consulta antes de comprar">
@@ -30,7 +29,6 @@
 </head>
 <body>
 
-  <!-- ============ HEADER ============ -->
   <header class="encabezado">
     <div class="contenedor encabezado__barra">
       <a href="/" class="logo">
@@ -44,19 +42,18 @@
         </div>
         <div class="encabezado__acciones">
           <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema claro/oscuro">
-            <i data-lucide="moon" width="18" height="18"></i>
+            <i data-lucide="moon" width="16" height="16"></i>
           </button>
-          <a href="reportar.html" class="boton boton--secundario">Reportar experiencia</a>
+          <a href="reportar.html" class="boton boton--secundario">Reportar</a>
         </div>
       </nav>
     </div>
   </header>
 
-  <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="contenedor hero__contenido">
       <span class="hero__etiqueta">
-        <i data-lucide="shield-check" width="14" height="14"></i>
+        <i data-lucide="shield-check" width="13" height="13"></i>
         Reportes de la comunidad boliviana
       </span>
       <h1 class="hero__titulo">Consulta antes de comprar</h1>
@@ -68,18 +65,18 @@
       <form class="buscador" id="formBuscador" novalidate>
         <div class="buscador__selector" role="radiogroup" aria-label="Tipo de búsqueda">
           <button type="button" class="buscador__opcion" data-tipo="whatsapp" aria-pressed="true" role="radio" aria-checked="true">
-            <i data-lucide="message-circle" width="15" height="15"></i>
+            <i data-lucide="message-circle" width="14" height="14"></i>
             WhatsApp
           </button>
           <button type="button" class="buscador__opcion" data-tipo="facebook" aria-pressed="false" role="radio" aria-checked="false">
-            <i data-lucide="facebook" width="15" height="15"></i>
+            <i data-lucide="facebook" width="14" height="14"></i>
             Facebook
           </button>
         </div>
 
         <div class="buscador__fila">
           <label class="buscador__campo">
-            <i data-lucide="search" width="18" height="18"></i>
+            <i data-lucide="search" width="17" height="17"></i>
             <input
               type="text"
               id="campoBusqueda"
@@ -95,11 +92,10 @@
         <p class="buscador__error" id="errorBusqueda">Ingresa un número boliviano válido (+591) o un enlace de Facebook.</p>
       </form>
 
-      <!-- Vista previa animada: ejemplo de cómo luce un resultado -->
       <div class="vista-previa" id="vistaPrevia" aria-hidden="true">
         <div class="vista-previa__izq">
           <div class="vista-previa__icono">
-            <i data-lucide="message-circle" width="18" height="18"></i>
+            <i data-lucide="message-circle" width="17" height="17"></i>
           </div>
           <div>
             <div class="vista-previa__numero" id="vpNumero">+591 700 XX XXX</div>
@@ -111,22 +107,18 @@
           Sin reportes
         </span>
       </div>
+
+      <div class="hero__aviso">
+        <i data-lucide="info" width="14" height="14"></i>
+        <p>
+          La información publicada corresponde a reportes enviados por usuarios y revisados por
+          el equipo de moderación. No constituye una resolución oficial ni una acusación definitiva.
+          Se recomienda verificar la información antes de tomar decisiones.
+        </p>
+      </div>
     </div>
   </section>
 
-  <!-- ============ AVISO LEGAL ============ -->
-  <div class="aviso-legal">
-    <div class="contenedor aviso-legal__texto">
-      <i data-lucide="info" width="16" height="16" class="aviso-legal__icono"></i>
-      <p>
-        La información publicada corresponde a reportes enviados por usuarios y revisados por
-        el equipo de moderación. No constituye una resolución oficial ni una acusación definitiva.
-        Se recomienda verificar la información antes de tomar decisiones.
-      </p>
-    </div>
-  </div>
-
-  <!-- ============ CÓMO FUNCIONA ============ -->
   <section class="seccion" id="como-funciona">
     <div class="contenedor">
       <div class="seccion__cabecera">
@@ -158,7 +150,6 @@
     </div>
   </section>
 
-  <!-- ============ ÚLTIMOS REPORTES ============ -->
   <section class="seccion" id="reportes-recientes">
     <div class="contenedor">
       <div class="seccion__cabecera">
@@ -168,13 +159,11 @@
       </div>
 
       <div class="reportes-recientes" id="listaReportesRecientes">
-        <!-- Se llena dinámicamente vía js/reportes-recientes.js -->
         <div class="estado-vacio">Cargando reportes recientes…</div>
       </div>
     </div>
   </section>
 
-  <!-- ============ FAQ ============ -->
   <section class="seccion" id="faq">
     <div class="contenedor">
       <div class="seccion__cabecera">
@@ -236,7 +225,6 @@
     </div>
   </section>
 
-  <!-- ============ CTA FINAL ============ -->
   <section class="seccion">
     <div class="contenedor">
       <div class="cta-final">
@@ -247,12 +235,11 @@
     </div>
   </section>
 
-  <!-- ============ FOOTER ============ -->
   <footer class="pie">
     <div class="contenedor">
       <div class="pie__grid">
         <div class="pie__columna">
-          <div class="logo" style="margin-bottom: var(--space-3);">AlertaBo<span class="logo__marca-punto">.</span></div>
+          <div class="logo" style="margin-bottom: var(--space-3); color: var(--text-primary);">AlertaBo<span class="logo__marca-punto">.</span></div>
           <p>Consulta antes de comprar. Reportes de la comunidad boliviana sobre WhatsApp y Facebook.</p>
         </div>
         <div class="pie__columna">
