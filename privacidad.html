@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de privacidad — AlertaBo</title>
+  <meta name="description" content="Cómo AlertaBo recopila, usa y protege la información de sus usuarios.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/legal.css">
+</head>
+<body>
+
+  <header class="encabezado">
+    <div class="contenedor encabezado__barra">
+      <a href="index.html" class="logo">AlertaBo<span class="logo__marca-punto">.</span></a>
+      <nav class="nav-principal">
+        <div class="encabezado__acciones">
+          <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema"><i data-lucide="moon" width="18" height="18"></i></button>
+          <a href="index.html" class="boton boton--secundario">Volver al inicio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pagina-legal">
+    <div class="contenedor pagina-legal__contenido">
+      <h1>Política de privacidad</h1>
+      <p class="pagina-legal__actualizado">Última actualización: julio de 2026</p>
+
+      <p>En AlertaBo nos importa cómo se maneja tu información. Esta política explica qué datos recopilamos, para qué los usamos, y qué control tienes sobre ellos.</p>
+
+      <h2>1. Búsquedas</h2>
+      <p>Buscar un número de WhatsApp o una página de Facebook en AlertaBo es <strong>completamente anónimo</strong>. No creamos cuentas de usuario ni guardamos un historial de qué buscaste, vinculado a tu identidad.</p>
+
+      <h2>2. Envío de reportes</h2>
+      <p>Cuando envías un reporte, recopilamos:</p>
+      <ul>
+        <li>La información que escribes en el formulario (ciudad, descripción, motivo, monto si aplica).</li>
+        <li>El número de WhatsApp o URL de Facebook que estás reportando (del negocio, no el tuyo).</li>
+        <li>Capturas de pantalla, si decides adjuntarlas.</li>
+        <li>Un identificador técnico derivado de tu dirección IP (no la IP en texto plano, sino una versión transformada de forma irreversible), usado únicamente para prevenir spam y abuso del sistema de reportes.</li>
+      </ul>
+      <p>No te pedimos tu nombre, correo electrónico ni ningún otro dato que te identifique directamente como la persona que envía el reporte.</p>
+
+      <h2>3. Cómo usamos la información</h2>
+      <ul>
+        <li>Para mostrar el reporte públicamente, una vez aprobado por moderación.</li>
+        <li>Para prevenir el envío masivo de reportes falsos o spam (límite de envíos por periodo de tiempo).</li>
+        <li>Para que el equipo de moderación pueda revisar, aprobar, rechazar o editar el contenido antes de publicarlo.</li>
+      </ul>
+
+      <h2>4. Almacenamiento</h2>
+      <p>Los datos se almacenan en Supabase (infraestructura basada en PostgreSQL), con controles de acceso restringido: solo los reportes aprobados por moderación son visibles públicamente. Las capturas de pantalla se guardan en un almacenamiento privado, accesible únicamente cuando el reporte asociado está aprobado.</p>
+
+      <h2>5. Con quién compartimos información</h2>
+      <p>No vendemos ni compartimos tu información con terceros con fines comerciales o publicitarios. La única información que se hace pública es el contenido del reporte una vez aprobado (ciudad, descripción, motivo, fecha) — nunca el identificador técnico usado para prevenir spam.</p>
+
+      <h2>6. Tus derechos</h2>
+      <p>Si enviaste un reporte y deseas que sea corregido o eliminado, o si eres dueño de un negocio y consideras que un reporte publicado contiene datos personales incorrectos, puedes escribirnos a <a href="mailto:contacto@alertabo.com">contacto@alertabo.com</a> para solicitar la revisión correspondiente.</p>
+
+      <h2>7. Cambios a esta política</h2>
+      <p>Podemos actualizar esta política conforme la Plataforma crece. Cualquier cambio relevante se reflejará en la fecha de "Última actualización" al inicio de esta página.</p>
+    </div>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie__inferior">
+        <span>© 2026 AlertaBo. Todos los derechos reservados.</span>
+        <span>Hecho en Bolivia 🇧🇴</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/tema.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  </script>
+</body>
+</html>

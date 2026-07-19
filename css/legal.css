@@ -1,0 +1,61 @@
+/* =====================================================================
+   ALERTABO — ESTILOS DE PÁGINAS LEGALES
+   ===================================================================== */
+
+.pagina-legal {
+  padding: var(--space-16) 0 var(--space-24);
+}
+
+.pagina-legal__contenido {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pagina-legal__actualizado {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-8);
+}
+
+.pagina-legal__contenido h1 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-4);
+}
+
+.pagina-legal__contenido h2 {
+  font-size: var(--text-xl);
+  margin-top: var(--space-10);
+  margin-bottom: var(--space-3);
+}
+
+.pagina-legal__contenido p,
+.pagina-legal__contenido li {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-3);
+}
+
+.pagina-legal__contenido ul,
+.pagina-legal__contenido ol {
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.pagina-legal__contenido strong {
+  color: var(--text-primary);
+}
+
+.pagina-legal__aviso-destacado {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand-500);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+  margin: var(--space-6) 0;
+}
+
+.pagina-legal__aviso-destacado p {
+  color: var(--text-primary);
+  margin-bottom: 0;
+}
