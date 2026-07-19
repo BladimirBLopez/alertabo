@@ -125,12 +125,12 @@ h1, h2, h3, h4 {
 .boton:active { transform: scale(0.97); }
 
 .boton--primario {
-  background: var(--brand-500);
+  background: var(--brand-600);
   color: #fff;
   box-shadow: var(--shadow-sm);
 }
 
-.boton--primario:hover { background: var(--brand-600); box-shadow: var(--shadow-md); }
+.boton--primario:hover { background: var(--brand-700); box-shadow: var(--shadow-md); }
 
 .boton--secundario {
   background: var(--bg-elevated);
