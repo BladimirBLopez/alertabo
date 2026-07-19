@@ -407,3 +407,27 @@
   padding: var(--space-4) var(--space-6) !important;
   letter-spacing: 0.01em;
 }
+
+/* ---- Vista previa: tratamiento tipo "demo" (borde punteado + etiqueta) ---- */
+.vista-previa {
+  position: relative;
+  border-style: dashed;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+  transition: opacity 220ms ease;
+}
+
+.vista-previa__etiqueta {
+  position: absolute;
+  top: -9px;
+  left: var(--space-4);
+  background: var(--bg);
+  padding: 0 var(--space-2);
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+.vista-previa.vista-previa--desvanecer { opacity: 0.2; }

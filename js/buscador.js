@@ -53,7 +53,7 @@
     if (tipoActual === 'whatsapp') {
       const numeroNormalizado = AlertaBoUtils.normalizarWhatsapp(valor);
       if (!numeroNormalizado) {
-        mostrarError('Ingresa un número boliviano válido (+591), 8 dígitos, empezando en 6 o 7.');
+        mostrarError('Ingresa un número boliviano válido, 8 dígitos, empezando en 6 o 7.');
         return;
       }
       irAResultados('whatsapp', numeroNormalizado);
@@ -72,6 +72,8 @@
     window.location.href = `resultado.html?${params.toString()}`;
   }
 
+  // ---- Vista previa animada del hero: ciclo demostrativo con fundido ----
+  const vistaPrevia = document.getElementById('vistaPrevia');
   const vpNumero = document.getElementById('vpNumero');
   const vpMeta = document.getElementById('vpMeta');
   const vpChip = document.getElementById('vpChip');
@@ -84,8 +86,7 @@
 
   let indiceEjemplo = 0;
 
-  function ciclarVistaPrevia() {
-    if (!vpNumero || !vpChip) return;
+  function actualizarContenidoVistaPrevia() {
     const ejemplo = EJEMPLOS[indiceEjemplo];
     const etiqueta = AlertaBoUtils.ETIQUETAS_RIESGO[ejemplo.estado];
 
@@ -97,7 +98,16 @@
     indiceEjemplo = (indiceEjemplo + 1) % EJEMPLOS.length;
   }
 
-  if (vpNumero) {
-    setInterval(ciclarVistaPrevia, 3200);
+  function ciclarVistaPrevia() {
+    if (!vistaPrevia) return;
+    vistaPrevia.classList.add('vista-previa--desvanecer');
+    setTimeout(() => {
+      actualizarContenidoVistaPrevia();
+      vistaPrevia.classList.remove('vista-previa--desvanecer');
+    }, 220);
+  }
+
+  if (vistaPrevia) {
+    setInterval(ciclarVistaPrevia, 3400);
   }
 })();
