@@ -398,3 +398,12 @@
   .hero__titulo { font-size: var(--text-3xl); }
   .pasos, .reportes-recientes { grid-template-columns: 1fr; }
 }
+
+/* ---- Override: el botón Buscar es un CTA principal, más grande que
+   los botones normales del sitio (que se redujeron por espacio en
+   el header) ---- */
+.buscador__boton {
+  font-size: var(--text-base) !important;
+  padding: var(--space-4) var(--space-6) !important;
+  letter-spacing: 0.01em;
+}
