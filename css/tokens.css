@@ -1,8 +1,8 @@
 /* =====================================================================
    ALERTABO — DESIGN TOKENS
    =====================================================================
-   Estilo: "boletín de alerta pública" — bordes definidos en vez de
-   sombras difusas, esquinas menos redondeadas, rojo directo.
+   Estilo: "masthead" editorial — header negro sólido, rojo como acento
+   de alerta, blanco de fondo. Bordes definidos, sin sombras difusas.
    ===================================================================== */
 
 :root {
@@ -10,15 +10,15 @@
   --font-body: 'Inter', 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
+  --text-xs: 0.7rem;
+  --text-sm: 0.85rem;
   --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.375rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.25rem;
-  --text-4xl: 3rem;
-  --text-5xl: 3.75rem;
+  --text-lg: 1.1rem;
+  --text-xl: 1.3rem;
+  --text-2xl: 1.6rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.2rem;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -45,7 +45,6 @@
   --transition-base: 260ms var(--ease);
   --transition-slow: 420ms var(--ease);
 
-  /* ---- Marca: rojo directo, tipo alerta oficial ---- */
   --brand-50:  #fdf1f1;
   --brand-200: #f6b8bb;
   --brand-400: #e0454e;
@@ -73,6 +72,9 @@
   --text-primary: #14100f;
   --text-secondary: #514747;
   --text-tertiary: #857a7a;
+
+  --masthead-bg: #14100f;
+  --masthead-fg: #ffffff;
 }
 
 [data-theme="dark"] {
@@ -97,4 +99,7 @@
   --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 3px 0 rgba(0, 0, 0, 0.4);
+
+  --masthead-bg: #000000;
+  --masthead-fg: #ffffff;
 }
