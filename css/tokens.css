@@ -1,5 +1,8 @@
 /* =====================================================================
    ALERTABO — DESIGN TOKENS
+   =====================================================================
+   Estilo: "boletín de alerta pública" — bordes definidos en vez de
+   sombras difusas, esquinas menos redondeadas, rojo directo.
    ===================================================================== */
 
 :root {
@@ -28,26 +31,27 @@
   --space-24: 6rem;
   --space-32: 8rem;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
   --radius-full: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(20, 10, 10, 0.06);
-  --shadow-md: 0 8px 24px rgba(20, 10, 10, 0.08);
-  --shadow-lg: 0 16px 48px rgba(20, 10, 10, 0.12);
+  --shadow-sm: 0 1px 0 rgba(20, 10, 10, 0.05);
+  --shadow-md: 0 2px 0 rgba(20, 10, 10, 0.08);
+  --shadow-lg: 0 3px 0 rgba(20, 10, 10, 0.1);
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 150ms var(--ease);
   --transition-base: 260ms var(--ease);
   --transition-slow: 420ms var(--ease);
 
-  --brand-50:  #fdf2f2;
-  --brand-200: #f3c9c9;
-  --brand-400: #b83a3a;
-  --brand-500: #9f2b2b;
-  --brand-600: #7f1d1d;
-  --brand-700: #641515;
+  /* ---- Marca: rojo directo, tipo alerta oficial ---- */
+  --brand-50:  #fdf1f1;
+  --brand-200: #f6b8bb;
+  --brand-400: #e0454e;
+  --brand-500: #d92330;
+  --brand-600: #c81d25;
+  --brand-700: #a01620;
 
   --risk-safe-bg: #e7f6ef;
   --risk-safe-fg: #157a52;
@@ -61,23 +65,22 @@
   --risk-high-fg: #c2410c;
   --risk-high-dot: #f97316;
 
-  /* Fondo de página ligeramente cálido; tarjetas en blanco puro, para
-     que las tarjetas se separen visualmente del fondo sin depender
-     solo de la sombra */
-  --bg: #faf5f4;
+  --bg: #ffffff;
   --bg-elevated: #ffffff;
-  --bg-subtle: #f2e6e5;
-  --border: #e6d3d2;
-  --text-primary: #1a1414;
-  --text-secondary: #695858;
-  --text-tertiary: #9a8888;
+  --bg-subtle: #f7f7f7;
+  --border: #1a1414;
+  --border-suave: #dcdcdc;
+  --text-primary: #14100f;
+  --text-secondary: #514747;
+  --text-tertiary: #857a7a;
 }
 
 [data-theme="dark"] {
   --bg: #0b0d10;
   --bg-elevated: #14171c;
   --bg-subtle: #1a1e24;
-  --border: #262b33;
+  --border: #f2f3f5;
+  --border-suave: #33383f;
   --text-primary: #f2f3f5;
   --text-secondary: #a6acb8;
   --text-tertiary: #6b7280;
@@ -91,7 +94,7 @@
   --risk-high-bg: rgba(249, 115, 22, 0.12);
   --risk-high-fg: #fb923c;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 3px 0 rgba(0, 0, 0, 0.4);
 }
