@@ -17,7 +17,7 @@
   width: 900px;
   height: 500px;
   background: radial-gradient(ellipse at center, var(--brand-200) 0%, transparent 70%);
-  opacity: 0.35;
+  opacity: 0.18;
   pointer-events: none;
   z-index: 0;
 }
