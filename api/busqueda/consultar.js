@@ -1,10 +1,14 @@
 /**
  * GET /api/busqueda/consultar?tipo=whatsapp|facebook&valor=...
- * Endpoint público de solo lectura. Devuelve el negocio (si existe) y
- * sus reportes APROBADOS únicamente.
+ * Endpoint público de solo lectura. Devuelve el negocio (si existe),
+ * sus reportes APROBADOS, y una vista previa de la página de Facebook
+ * si aplica (cacheada por 7 días).
  */
 const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
 const { normalizarWhatsapp, normalizarFacebookUrl } = require('../../utils/validacionServidor');
+const { obtenerVistaPreviaFacebook } = require('../../services/facebookPreview');
+
+const SIETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000;
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -47,6 +51,26 @@ module.exports = async (req, res) => {
     return;
   }
 
+  let vistaPrevia = null;
+  if (negocio.facebook_url) {
+    const cacheVencido = !negocio.facebook_og_actualizado_en
+      || (Date.now() - new Date(negocio.facebook_og_actualizado_en).getTime()) > SIETE_DIAS_MS;
+
+    if (!cacheVencido) {
+      vistaPrevia = { titulo: negocio.facebook_og_titulo, imagen: negocio.facebook_og_imagen };
+    } else {
+      const resultado = await obtenerVistaPreviaFacebook(negocio.facebook_url);
+      if (resultado) {
+        vistaPrevia = resultado;
+        await supabase.from('negocios').update({
+          facebook_og_titulo: resultado.titulo,
+          facebook_og_imagen: resultado.imagen,
+          facebook_og_actualizado_en: new Date().toISOString(),
+        }).eq('id', negocio.id);
+      }
+    }
+  }
+
   const { data: reportes, error: errorReportes } = await supabase
     .from('reportes')
     .select('id, ciudad, descripcion, motivo, creado_en, hubo_perdida_economica')
@@ -79,6 +103,7 @@ module.exports = async (req, res) => {
       nivel_riesgo: negocio.nivel_riesgo,
       ultimo_reporte_en: negocio.ultimo_reporte_en,
     },
+    vista_previa_facebook: vistaPrevia,
     motivos_frecuentes: motivosFrecuentes,
     reportes: reportes || [],
   });

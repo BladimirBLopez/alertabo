@@ -1,6 +1,7 @@
 /**
  * GET /api/busqueda/recientes?limite=6
- * Devuelve los últimos reportes APROBADOS, para la sección de inicio.
+ * Devuelve los últimos reportes APROBADOS con datos del negocio
+ * asociado (nombre, whatsapp, facebook), para la sección de inicio.
  */
 const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
 
@@ -15,7 +16,10 @@ module.exports = async (req, res) => {
 
   const { data, error } = await supabase
     .from('reportes')
-    .select('ciudad, motivo, descripcion, creado_en')
+    .select(`
+      ciudad, motivo, descripcion, creado_en,
+      negocios ( nombre, whatsapp, facebook_url, facebook_og_titulo, facebook_og_imagen )
+    `)
     .eq('estado', 'aprobado')
     .order('creado_en', { ascending: false })
     .limit(limite);
