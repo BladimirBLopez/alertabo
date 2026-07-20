@@ -45,11 +45,12 @@
     if (negocio.whatsapp) paramsBusqueda = new URLSearchParams({ tipo: 'whatsapp', valor: negocio.whatsapp });
     else if (negocio.facebook_url) paramsBusqueda = new URLSearchParams({ tipo: 'facebook', valor: negocio.facebook_url });
 
-    const envoltorioInicio = paramsBusqueda ? `<a href="resultado.html?${paramsBusqueda.toString()}" class="tarjeta-reporte__enlace">` : '<div>';
-    const envoltorioFin = paramsBusqueda ? '</a>' : '</div>';
+    // Envoltura: <a> clicable si hay a dónde ir a buscar, o <article> si no.
+    const nombreEtiqueta = paramsBusqueda ? 'a' : 'article';
+    const atributoHref = paramsBusqueda ? ` href="resultado.html?${paramsBusqueda.toString()}"` : '';
 
     return `
-      ${envoltorioInicio.replace('>', ' class="tarjeta-reporte">').replace('<div class="tarjeta-reporte">', '<article class="tarjeta-reporte">')}
+      <${nombreEtiqueta} class="tarjeta-reporte"${atributoHref}>
         <div class="tarjeta-reporte__negocio">
           ${avatarHtml}
           <div>
@@ -60,7 +61,7 @@
         <div class="tarjeta-reporte__motivo">${motivo}</div>
         <p class="tarjeta-reporte__desc">${descripcion}</p>
         <div class="tarjeta-reporte__fecha">${fecha}</div>
-      ${paramsBusqueda ? '</a>' : '</article>'}
+      </${nombreEtiqueta}>
     `;
   }
 
