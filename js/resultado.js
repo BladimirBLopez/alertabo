@@ -1,8 +1,9 @@
 /**
  * resultado.js
  * Lee ?tipo=&valor= de la URL, consulta /api/busqueda/consultar y
- * renderiza el resultado: tarjeta de negocio con reportes, o el
- * estado de "sin reportes".
+ * renderiza el resultado: tarjeta de negocio (con vista previa de
+ * Facebook si está disponible) con sus reportes, o el estado de
+ * "sin reportes".
  */
 (function () {
   const contenedor = document.getElementById('contenidoResultado');
@@ -60,8 +61,22 @@
   }
 
   function renderizarNegocio(datos) {
-    const { negocio, reportes, motivos_frecuentes } = datos;
+    const { negocio, reportes, motivos_frecuentes, vista_previa_facebook } = datos;
     const etiqueta = AlertaBoUtils.ETIQUETAS_RIESGO[negocio.nivel_riesgo] || AlertaBoUtils.ETIQUETAS_RIESGO.sin_reportes;
+
+    const nombreMostrado = negocio.nombre
+      || (vista_previa_facebook && vista_previa_facebook.titulo)
+      || 'Negocio sin nombre registrado';
+
+    const previaFacebookHtml = vista_previa_facebook ? `
+      <div class="tarjeta-negocio__fb-preview">
+        ${vista_previa_facebook.imagen ? `<img src="${AlertaBoUtils.sanitizarTexto(vista_previa_facebook.imagen)}" alt="Foto de la página de Facebook" loading="lazy">` : `<div class="tarjeta-negocio__fb-preview-icono"><i data-lucide="facebook" width="20" height="20"></i></div>`}
+        <div>
+          <div class="tarjeta-negocio__fb-preview-label">Página de Facebook</div>
+          <div class="tarjeta-negocio__fb-preview-titulo">${AlertaBoUtils.sanitizarTexto(vista_previa_facebook.titulo || negocio.facebook_url)}</div>
+        </div>
+      </div>
+    ` : '';
 
     const filasDatos = [];
     if (negocio.whatsapp) filasDatos.push(['WhatsApp', AlertaBoUtils.formatearWhatsappVisible(negocio.whatsapp)]);
@@ -80,6 +95,16 @@
     const motivosHtml = (motivos_frecuentes || []).map((m) =>
       `<span class="etiqueta-motivo">${AlertaBoUtils.sanitizarTexto(m)}</span>`
     ).join('');
+
+    // ---- Enlaces directos para verificar por cuenta propia ----
+    const enlacesHtml = [];
+    if (negocio.whatsapp) {
+      const numeroWa = negocio.whatsapp.replace(/[^\d]/g, '');
+      enlacesHtml.push(`<a href="https://wa.me/${numeroWa}" target="_blank" rel="noopener noreferrer" class="boton boton--secundario"><i data-lucide="message-circle" width="15" height="15"></i> Abrir WhatsApp</a>`);
+    }
+    if (negocio.facebook_url) {
+      enlacesHtml.push(`<a href="${AlertaBoUtils.sanitizarTexto(negocio.facebook_url)}" target="_blank" rel="noopener noreferrer" class="boton boton--secundario"><i data-lucide="facebook" width="15" height="15"></i> Ver Facebook</a>`);
+    }
 
     const reportesHtml = (reportes || []).map((r) => `
       <div class="reporte-detalle">
@@ -101,16 +126,22 @@
       <div class="tarjeta-negocio">
         <div class="tarjeta-negocio__cabecera">
           <div>
-            <h1 class="tarjeta-negocio__nombre">${AlertaBoUtils.sanitizarTexto(negocio.nombre || 'Negocio sin nombre registrado')}</h1>
+            <h1 class="tarjeta-negocio__nombre">${AlertaBoUtils.sanitizarTexto(nombreMostrado)}</h1>
             <div class="tarjeta-negocio__meta">Reportes realizados por la comunidad</div>
           </div>
           <span class="chip-riesgo ${etiqueta.clase}">
             <span class="chip-riesgo__punto"></span>${etiqueta.texto}
           </span>
         </div>
+
+        ${previaFacebookHtml}
+
         <div class="tarjeta-negocio__datos">${filasHtml}</div>
         ${motivosHtml ? `<div class="tarjeta-negocio__motivos">${motivosHtml}</div>` : ''}
-        <a href="reportar.html?${params.toString()}" class="boton boton--secundario">Reportar experiencia</a>
+
+        <div class="tarjeta-negocio__enlaces-externos">${enlacesHtml.join('')}</div>
+
+        <a href="reportar.html?${params.toString()}" class="boton boton--primario boton--ancho-completo">Reportar experiencia</a>
       </div>
 
       <div class="lista-reportes">

@@ -1,7 +1,8 @@
 /**
  * reportes-recientes.js
  * Consume /api/busqueda/recientes y renderiza las tarjetas de la sección
- * "Últimos reportes" en la página de inicio.
+ * "Últimos reportes" en la página de inicio, incluyendo el nombre del
+ * negocio y su miniatura de Facebook si está disponible.
  */
 (function () {
   const contenedor = document.getElementById('listaReportesRecientes');
@@ -20,6 +21,7 @@
       }
 
       contenedor.innerHTML = reportes.map(renderizarTarjeta).join('');
+      if (window.lucide) window.lucide.createIcons();
     } catch (error) {
       console.error('[AlertaBo] No se pudieron cargar los reportes recientes:', error);
       contenedor.innerHTML = '<div class="estado-vacio">No se pudieron cargar los reportes en este momento.</div>';
@@ -27,20 +29,38 @@
   }
 
   function renderizarTarjeta(reporte) {
+    const negocio = reporte.negocios || {};
     const ciudad = AlertaBoUtils.sanitizarTexto(reporte.ciudad || 'Bolivia');
     const motivo = AlertaBoUtils.sanitizarTexto(reporte.motivo || 'Reporte de la comunidad');
     const descripcion = AlertaBoUtils.sanitizarTexto(reporte.descripcion || '');
     const fecha = AlertaBoUtils.formatearFecha(reporte.creado_en);
 
+    const nombreNegocio = negocio.nombre || negocio.facebook_og_titulo || null;
+
+    const avatarHtml = negocio.facebook_og_imagen
+      ? `<img src="${AlertaBoUtils.sanitizarTexto(negocio.facebook_og_imagen)}" alt="" class="tarjeta-reporte__avatar" loading="lazy">`
+      : `<div class="tarjeta-reporte__avatar tarjeta-reporte__avatar--icono"><i data-lucide="store" width="16" height="16"></i></div>`;
+
+    let paramsBusqueda = null;
+    if (negocio.whatsapp) paramsBusqueda = new URLSearchParams({ tipo: 'whatsapp', valor: negocio.whatsapp });
+    else if (negocio.facebook_url) paramsBusqueda = new URLSearchParams({ tipo: 'facebook', valor: negocio.facebook_url });
+
+    const envoltorioInicio = paramsBusqueda ? `<a href="resultado.html?${paramsBusqueda.toString()}" class="tarjeta-reporte__enlace">` : '<div>';
+    const envoltorioFin = paramsBusqueda ? '</a>' : '</div>';
+
     return `
-      <article class="tarjeta-reporte">
-        <div class="tarjeta-reporte__cabecera">
-          <span class="tarjeta-reporte__ciudad">${ciudad}</span>
+      ${envoltorioInicio.replace('>', ' class="tarjeta-reporte">').replace('<div class="tarjeta-reporte">', '<article class="tarjeta-reporte">')}
+        <div class="tarjeta-reporte__negocio">
+          ${avatarHtml}
+          <div>
+            <div class="tarjeta-reporte__nombre-negocio">${nombreNegocio ? AlertaBoUtils.sanitizarTexto(nombreNegocio) : 'Negocio sin nombre registrado'}</div>
+            <span class="tarjeta-reporte__ciudad">${ciudad}</span>
+          </div>
         </div>
         <div class="tarjeta-reporte__motivo">${motivo}</div>
         <p class="tarjeta-reporte__desc">${descripcion}</p>
         <div class="tarjeta-reporte__fecha">${fecha}</div>
-      </article>
+      ${paramsBusqueda ? '</a>' : '</article>'}
     `;
   }
 

@@ -148,3 +148,62 @@
   font-size: var(--text-xs);
   color: var(--risk-warn-fg);
 }
+
+/* ---- Vista previa de página de Facebook (og:title / og:image) ---- */
+.tarjeta-negocio__fb-preview {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-subtle);
+  border: 2px solid var(--border-suave, var(--border));
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+.tarjeta-negocio__fb-preview img {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.tarjeta-negocio__fb-preview-icono {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-suave, var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.tarjeta-negocio__fb-preview-label {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tarjeta-negocio__fb-preview-titulo {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ---- Enlaces directos (Abrir WhatsApp / Ver Facebook) ---- */
+.tarjeta-negocio__enlaces-externos {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.tarjeta-negocio__enlaces-externos .boton {
+  flex: 1;
+  min-width: 140px;
+}

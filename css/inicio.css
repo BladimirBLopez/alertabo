@@ -431,3 +431,43 @@
 }
 
 .vista-previa.vista-previa--desvanecer { opacity: 0.2; }
+
+/* ---- Tarjeta de reporte reciente: con nombre de negocio y miniatura ---- */
+.tarjeta-reporte {
+  display: block;
+  color: inherit;
+}
+
+a.tarjeta-reporte:hover {
+  border-color: var(--brand-600);
+}
+
+.tarjeta-reporte__negocio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.tarjeta-reporte__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.tarjeta-reporte__avatar--icono {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-suave, var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+
+.tarjeta-reporte__nombre-negocio {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
