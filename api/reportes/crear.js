@@ -26,7 +26,6 @@ module.exports = async (req, res) => {
 
   const cuerpo = req.body || {};
 
-  // Honeypot: campo oculto que un humano nunca llena, solo los bots
   if (cuerpo.sitio_web) {
     res.status(200).json({ ok: true });
     return;
@@ -81,7 +80,6 @@ module.exports = async (req, res) => {
 
   const supabase = obtenerClienteSupabaseAdmin();
 
-  // ---- Rate limit básico: máx N reportes por IP en X minutos ----
   const desde = new Date(Date.now() - VENTANA_RATE_LIMIT_MINUTOS * 60 * 1000).toISOString();
   const { count: conteoReciente, error: errorConteo } = await supabase
     .from('reportes')
@@ -94,7 +92,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // ---- Buscar negocio existente o crear uno nuevo ----
+  // ---- Buscar negocio existente (por WhatsApp o Facebook) o crear uno nuevo ----
   let negocio = null;
   if (whatsapp) {
     const { data } = await supabase.from('negocios').select('*').eq('whatsapp', whatsapp).maybeSingle();
@@ -117,6 +115,27 @@ module.exports = async (req, res) => {
       return;
     }
     negocio = nuevoNegocio;
+  } else {
+    // ---- El negocio ya existía: completar datos que le falten con lo
+    // nuevo que llegó en este reporte (ej: ya tenía WhatsApp, ahora
+    // también se reporta su Facebook) ----
+    const actualizaciones = {};
+    if (whatsapp && !negocio.whatsapp) actualizaciones.whatsapp = whatsapp;
+    if (facebookUrl && !negocio.facebook_url) actualizaciones.facebook_url = facebookUrl;
+    if (nombreNegocio && !negocio.nombre) actualizaciones.nombre = nombreNegocio;
+
+    if (Object.keys(actualizaciones).length > 0) {
+      const { data: negocioActualizado, error: errorActualizar } = await supabase
+        .from('negocios')
+        .update(actualizaciones)
+        .eq('id', negocio.id)
+        .select()
+        .single();
+
+      if (!errorActualizar && negocioActualizado) {
+        negocio = negocioActualizado;
+      }
+    }
   }
 
   // ---- Crear el reporte (siempre pendiente) ----
@@ -144,7 +163,6 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // ---- Subir capturas opcionales (vienen en base64 desde el frontend) ----
   for (const imagen of imagenes) {
     try {
       if (!imagen.datos_base64 || !imagen.nombre) continue;
