@@ -33,7 +33,22 @@ async function obtenerVistaPreviaFacebook(url) {
 function extraerMeta(html, propiedad) {
   const regex = new RegExp(`<meta[^>]+property=["']${propiedad}["'][^>]+content=["']([^"']+)["']`, 'i');
   const match = html.match(regex);
-  return match ? match[1] : null;
+  if (!match) return null;
+  return decodificarEntidadesHtml(match[1]);
+}
+
+/**
+ * El HTML escapa caracteres especiales dentro de atributos (& se
+ * escribe como &amp;, etc). Sin decodificarlos, una URL de imagen con
+ * "&" en sus parámetros queda corrupta e inválida.
+ */
+function decodificarEntidadesHtml(texto) {
+  return texto
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }
 
 module.exports = { obtenerVistaPreviaFacebook };
