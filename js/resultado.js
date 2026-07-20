@@ -55,7 +55,7 @@
         </div>
         <h2>No existen reportes registrados</h2>
         <p>No encontramos reportes de la comunidad para <strong>${AlertaBoUtils.sanitizarTexto(valorVisible)}</strong>. Esto no garantiza que sea seguro, solo que nadie ha reportado un problema todavía.</p>
-        <a href="reportar.html?${params.toString()}" class="boton boton--primario">Reportar experiencia</a>
+        <a href="reportar.html?${params.toString()}" class="boton boton--primario boton--llamativo"><i data-lucide="megaphone" width="15" height="15"></i> Reportar experiencia</a>
       </div>
     `;
   }
@@ -141,7 +141,7 @@
 
         <div class="tarjeta-negocio__enlaces-externos">${enlacesHtml.join('')}</div>
 
-        <a href="reportar.html?${params.toString()}" class="boton boton--primario boton--ancho-completo">Reportar experiencia</a>
+        <a href="reportar.html?${params.toString()}" class="boton boton--primario boton--llamativo boton--ancho-completo"><i data-lucide="megaphone" width="15" height="15"></i> Reportar experiencia</a>
       </div>
 
       <div class="lista-reportes">
