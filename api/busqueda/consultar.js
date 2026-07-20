@@ -1,8 +1,10 @@
 /**
  * GET /api/busqueda/consultar?tipo=whatsapp|facebook&valor=...
- * Endpoint público de solo lectura. Devuelve el negocio (si existe),
- * sus reportes APROBADOS, y una vista previa de la página de Facebook
- * si aplica (cacheada por 7 días).
+ * Endpoint público de solo lectura. Solo revela datos del negocio
+ * (nombre, contacto, vista previa de Facebook) si tiene AL MENOS un
+ * reporte aprobado vigente. Si el negocio existe en la base pero no
+ * tiene reportes aprobados (nunca se aprobó ninguno, o se eliminaron),
+ * se comporta igual que "no encontrado" — no se expone su información.
  */
 const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
 const { normalizarWhatsapp, normalizarFacebookUrl } = require('../../utils/validacionServidor');
@@ -35,8 +37,6 @@ module.exports = async (req, res) => {
   const supabase = obtenerClienteSupabaseAdmin();
   const columna = tipo === 'whatsapp' ? 'whatsapp' : 'facebook_url';
 
-  // ---- Para Facebook: probamos con el valor tal cual Y con su URL
-  // resuelta (por si es un link "share/xxxxx" temporal) ----
   let candidatos = [valorNormalizado];
   if (tipo === 'facebook' && valorNormalizado.includes('/share/')) {
     const resuelto = await resolverUrlCanonicaFacebook(valorNormalizado);
@@ -60,6 +60,24 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const { data: reportes, error: errorReportes } = await supabase
+    .from('reportes')
+    .select('id, ciudad, descripcion, motivo, creado_en, hubo_perdida_economica')
+    .eq('negocio_id', negocio.id)
+    .eq('estado', 'aprobado')
+    .order('creado_en', { ascending: false });
+
+  if (errorReportes) {
+    res.status(500).json({ error: 'Error al consultar reportes' });
+    return;
+  }
+
+  // ---- Sin reportes aprobados vigentes: se comporta como "no encontrado" ----
+  if (!reportes || reportes.length === 0) {
+    res.status(200).json({ encontrado: false });
+    return;
+  }
+
   // ---- Vista previa de Facebook (cacheada 7 días) + autocorrección de
   // negocios viejos que quedaron con un link "share" temporal ----
   let vistaPrevia = null;
@@ -78,8 +96,6 @@ module.exports = async (req, res) => {
           facebook_og_imagen: resultado.imagen,
           facebook_og_actualizado_en: new Date().toISOString(),
         };
-        // Si el link guardado era temporal ("share/xxxxx"), lo
-        // reemplazamos por la URL permanente que encontramos
         if (resultado.urlFinal && negocio.facebook_url.includes('/share/')) {
           actualizacion.facebook_url = resultado.urlFinal;
         }
@@ -88,20 +104,8 @@ module.exports = async (req, res) => {
     }
   }
 
-  const { data: reportes, error: errorReportes } = await supabase
-    .from('reportes')
-    .select('id, ciudad, descripcion, motivo, creado_en, hubo_perdida_economica')
-    .eq('negocio_id', negocio.id)
-    .eq('estado', 'aprobado')
-    .order('creado_en', { ascending: false });
-
-  if (errorReportes) {
-    res.status(500).json({ error: 'Error al consultar reportes' });
-    return;
-  }
-
   const conteoMotivos = {};
-  (reportes || []).forEach((r) => {
+  reportes.forEach((r) => {
     if (r.motivo) conteoMotivos[r.motivo] = (conteoMotivos[r.motivo] || 0) + 1;
   });
   const motivosFrecuentes = Object.entries(conteoMotivos)
@@ -122,6 +126,6 @@ module.exports = async (req, res) => {
     },
     vista_previa_facebook: vistaPrevia,
     motivos_frecuentes: motivosFrecuentes,
-    reportes: reportes || [],
+    reportes,
   });
 };
