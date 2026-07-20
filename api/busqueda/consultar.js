@@ -6,7 +6,7 @@
  */
 const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
 const { normalizarWhatsapp, normalizarFacebookUrl } = require('../../utils/validacionServidor');
-const { obtenerVistaPreviaFacebook } = require('../../services/facebookPreview');
+const { obtenerVistaPreviaFacebook, resolverUrlCanonicaFacebook } = require('../../services/facebookPreview');
 
 const SIETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -35,10 +35,19 @@ module.exports = async (req, res) => {
   const supabase = obtenerClienteSupabaseAdmin();
   const columna = tipo === 'whatsapp' ? 'whatsapp' : 'facebook_url';
 
+  // ---- Para Facebook: probamos con el valor tal cual Y con su URL
+  // resuelta (por si es un link "share/xxxxx" temporal) ----
+  let candidatos = [valorNormalizado];
+  if (tipo === 'facebook' && valorNormalizado.includes('/share/')) {
+    const resuelto = await resolverUrlCanonicaFacebook(valorNormalizado);
+    if (resuelto && resuelto !== valorNormalizado) candidatos.unshift(resuelto);
+  }
+
   const { data: negocio, error: errorNegocio } = await supabase
     .from('negocios')
     .select('*')
-    .eq(columna, valorNormalizado)
+    .in(columna, candidatos)
+    .limit(1)
     .maybeSingle();
 
   if (errorNegocio) {
@@ -51,6 +60,8 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // ---- Vista previa de Facebook (cacheada 7 días) + autocorrección de
+  // negocios viejos que quedaron con un link "share" temporal ----
   let vistaPrevia = null;
   if (negocio.facebook_url) {
     const cacheVencido = !negocio.facebook_og_actualizado_en
@@ -61,12 +72,18 @@ module.exports = async (req, res) => {
     } else {
       const resultado = await obtenerVistaPreviaFacebook(negocio.facebook_url);
       if (resultado) {
-        vistaPrevia = resultado;
-        await supabase.from('negocios').update({
+        vistaPrevia = { titulo: resultado.titulo, imagen: resultado.imagen };
+        const actualizacion = {
           facebook_og_titulo: resultado.titulo,
           facebook_og_imagen: resultado.imagen,
           facebook_og_actualizado_en: new Date().toISOString(),
-        }).eq('id', negocio.id);
+        };
+        // Si el link guardado era temporal ("share/xxxxx"), lo
+        // reemplazamos por la URL permanente que encontramos
+        if (resultado.urlFinal && negocio.facebook_url.includes('/share/')) {
+          actualizacion.facebook_url = resultado.urlFinal;
+        }
+        await supabase.from('negocios').update(actualizacion).eq('id', negocio.id);
       }
     }
   }

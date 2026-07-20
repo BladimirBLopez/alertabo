@@ -4,6 +4,7 @@
  * hasta que un moderador lo apruebe).
  */
 const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
+const { resolverUrlCanonicaFacebook } = require('../../services/facebookPreview');
 const {
   normalizarWhatsapp,
   normalizarFacebookUrl,
@@ -37,7 +38,10 @@ module.exports = async (req, res) => {
   }
 
   const whatsapp = cuerpo.whatsapp ? normalizarWhatsapp(cuerpo.whatsapp) : null;
-  const facebookUrl = cuerpo.facebook_url ? normalizarFacebookUrl(cuerpo.facebook_url) : null;
+  let facebookUrl = cuerpo.facebook_url ? normalizarFacebookUrl(cuerpo.facebook_url) : null;
+  if (facebookUrl && facebookUrl.includes('/share/')) {
+    facebookUrl = await resolverUrlCanonicaFacebook(facebookUrl);
+  }
 
   if (!whatsapp && !facebookUrl) {
     res.status(400).json({ error: 'Debes ingresar al menos un número de WhatsApp o una página de Facebook' });
