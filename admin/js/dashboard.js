@@ -23,7 +23,7 @@
     const respuesta = await fetch('/api/admin/verificar');
     const datos = await respuesta.json();
     if (!datos.autenticado) {
-      window.location.href = 'index.html';
+      window.location.href = '/admin';
       return false;
     }
     return true;
@@ -50,7 +50,7 @@
 
     try {
       const respuesta = await fetch(`/api/admin/reportes?${params.toString()}`);
-      if (respuesta.status === 401) { window.location.href = 'index.html'; return; }
+      if (respuesta.status === 401) { window.location.href = '/admin'; return; }
       const datos = await respuesta.json();
 
       if (!datos.reportes || datos.reportes.length === 0) {
@@ -142,7 +142,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, accion, ...extra }),
       });
-      if (respuesta.status === 401) { window.location.href = 'index.html'; return; }
+      if (respuesta.status === 401) { window.location.href = '/admin'; return; }
       if (!respuesta.ok) { alert('No se pudo completar la acción.'); return; }
 
       await Promise.all([cargarReportes(), cargarEstadisticas()]);
@@ -177,7 +177,7 @@
 
   botonLogout.addEventListener('click', async () => {
     await fetch('/api/admin/logout', { method: 'POST' });
-    window.location.href = 'index.html';
+    window.location.href = '/admin';
   });
 
   (async function iniciar() {

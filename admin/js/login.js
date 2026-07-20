@@ -31,7 +31,7 @@
         return;
       }
 
-      window.location.href = 'dashboard.html';
+      window.location.href = '/admin/dashboard';
     } catch (error) {
       errorLogin.textContent = 'No se pudo conectar con el servidor.';
       errorLogin.classList.add('visible');

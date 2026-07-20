@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
 </head>
 <body>
 
@@ -19,7 +19,7 @@
     <div class="contenedor encabezado__barra">
       <span class="logo">AlertaBo<span class="logo__marca-punto">.</span> Admin</span>
       <div class="encabezado__acciones">
-        <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema"><i data-lucide="moon" width="18" height="18"></i></button>
+        <button class="toggle-tema" id="toggleTema" aria-label="Cambiar tema"><i data-lucide="moon" width="16" height="16"></i></button>
         <button class="boton boton--secundario" id="botonLogout">Cerrar sesión</button>
       </div>
     </div>
@@ -54,7 +54,6 @@
     </div>
   </main>
 
-  <!-- Modal de edición -->
   <div class="modal-fondo" id="modalEditar">
     <div class="modal-caja">
       <h3>Editar reporte</h3>
@@ -74,8 +73,8 @@
     </div>
   </div>
 
-  <script src="../js/tema.js"></script>
-  <script src="js/dashboard.js"></script>
+  <script src="/js/tema.js"></script>
+  <script src="/admin/js/dashboard.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
   </script>
