@@ -1,8 +1,9 @@
 /**
  * reportes-recientes.js
  * Consume /api/busqueda/recientes y renderiza las tarjetas de la sección
- * "Últimos reportes" en la página de inicio, incluyendo el nombre del
- * negocio y su miniatura de Facebook si está disponible.
+ * "Últimos reportes": imagen grande arriba (foto de Facebook si existe,
+ * o un placeholder), nombre del negocio, descripción, etiquetas tipo
+ * pill (ciudad/motivo), y enlace "Ver detalles".
  */
 (function () {
   const contenedor = document.getElementById('listaReportesRecientes');
@@ -35,32 +36,33 @@
     const descripcion = AlertaBoUtils.sanitizarTexto(reporte.descripcion || '');
     const fecha = AlertaBoUtils.formatearFecha(reporte.creado_en);
 
-    const nombreNegocio = negocio.nombre || negocio.facebook_og_titulo || null;
+    const nombreNegocio = negocio.nombre || negocio.facebook_og_titulo || 'Negocio sin nombre registrado';
 
-    const avatarHtml = negocio.facebook_og_imagen
-      ? `<img src="${AlertaBoUtils.sanitizarTexto(negocio.facebook_og_imagen)}" alt="" class="tarjeta-reporte__avatar" loading="lazy" onerror="this.remove()">`
-      : `<div class="tarjeta-reporte__avatar tarjeta-reporte__avatar--icono"><i data-lucide="store" width="16" height="16"></i></div>`;
+    const imagenHtml = negocio.facebook_og_imagen
+      ? `<img src="${AlertaBoUtils.sanitizarTexto(negocio.facebook_og_imagen)}" alt="" class="tarjeta-reporte__imagen" loading="lazy" onerror="this.outerHTML='<div class=&quot;tarjeta-reporte__imagen-placeholder&quot;><i data-lucide=&quot;store&quot; width=&quot;28&quot; height=&quot;28&quot;></i></div>'">`
+      : `<div class="tarjeta-reporte__imagen-placeholder"><i data-lucide="store" width="28" height="28"></i></div>`;
 
     let paramsBusqueda = null;
     if (negocio.whatsapp) paramsBusqueda = new URLSearchParams({ tipo: 'whatsapp', valor: negocio.whatsapp });
     else if (negocio.facebook_url) paramsBusqueda = new URLSearchParams({ tipo: 'facebook', valor: negocio.facebook_url });
 
-    // Envoltura: <a> clicable si hay a dónde ir a buscar, o <article> si no.
     const nombreEtiqueta = paramsBusqueda ? 'a' : 'article';
     const atributoHref = paramsBusqueda ? ` href="resultado.html?${paramsBusqueda.toString()}"` : '';
 
     return `
       <${nombreEtiqueta} class="tarjeta-reporte"${atributoHref}>
-        <div class="tarjeta-reporte__negocio">
-          ${avatarHtml}
-          <div>
-            <div class="tarjeta-reporte__nombre-negocio">${nombreNegocio ? AlertaBoUtils.sanitizarTexto(nombreNegocio) : 'Negocio sin nombre registrado'}</div>
-            <span class="tarjeta-reporte__ciudad">${ciudad}</span>
+        ${imagenHtml}
+        <div class="tarjeta-reporte__cuerpo">
+          <div class="tarjeta-reporte__meta-superior">${ciudad} · ${fecha}</div>
+          <div class="tarjeta-reporte__nombre-negocio">${AlertaBoUtils.sanitizarTexto(nombreNegocio)}</div>
+          <p class="tarjeta-reporte__desc">${descripcion}</p>
+          <div class="tarjeta-reporte__pills">
+            <span class="tarjeta-reporte__pill tarjeta-reporte__pill--motivo">${motivo}</span>
+          </div>
+          <div class="tarjeta-reporte__pie">
+            <span class="tarjeta-reporte__ver-mas">Ver detalles <i data-lucide="arrow-right" width="14" height="14"></i></span>
           </div>
         </div>
-        <div class="tarjeta-reporte__motivo">${motivo}</div>
-        <p class="tarjeta-reporte__desc">${descripcion}</p>
-        <div class="tarjeta-reporte__fecha">${fecha}</div>
       </${nombreEtiqueta}>
     `;
   }
