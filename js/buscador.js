@@ -12,7 +12,7 @@
   let tipoActual = 'whatsapp';
 
   const PLACEHOLDERS = {
-    whatsapp: 'Ej: 69356292',
+    whatsapp: 'Escribe el número aquí',
     facebook: 'Ej: facebook.com/mitienda',
   };
 

@@ -38,7 +38,7 @@
     const nombreNegocio = negocio.nombre || negocio.facebook_og_titulo || null;
 
     const avatarHtml = negocio.facebook_og_imagen
-      ? `<img src="${AlertaBoUtils.sanitizarTexto(negocio.facebook_og_imagen)}" alt="" class="tarjeta-reporte__avatar" loading="lazy">`
+      ? `<img src="${AlertaBoUtils.sanitizarTexto(negocio.facebook_og_imagen)}" alt="" class="tarjeta-reporte__avatar" loading="lazy" onerror="this.remove()">`
       : `<div class="tarjeta-reporte__avatar tarjeta-reporte__avatar--icono"><i data-lucide="store" width="16" height="16"></i></div>`;
 
     let paramsBusqueda = null;

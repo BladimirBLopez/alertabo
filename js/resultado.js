@@ -70,7 +70,7 @@
 
     const previaFacebookHtml = vista_previa_facebook ? `
       <div class="tarjeta-negocio__fb-preview">
-        ${vista_previa_facebook.imagen ? `<img src="${AlertaBoUtils.sanitizarTexto(vista_previa_facebook.imagen)}" alt="Foto de la página de Facebook" loading="lazy">` : `<div class="tarjeta-negocio__fb-preview-icono"><i data-lucide="facebook" width="20" height="20"></i></div>`}
+        ${vista_previa_facebook.imagen ? `<img src="${AlertaBoUtils.sanitizarTexto(vista_previa_facebook.imagen)}" alt="Foto de la página de Facebook" loading="lazy" onerror="this.remove()">` : `<div class="tarjeta-negocio__fb-preview-icono"><i data-lucide="facebook" width="20" height="20"></i></div>`}
         <div>
           <div class="tarjeta-negocio__fb-preview-label">Página de Facebook</div>
           <div class="tarjeta-negocio__fb-preview-titulo">${AlertaBoUtils.sanitizarTexto(vista_previa_facebook.titulo || negocio.facebook_url)}</div>
