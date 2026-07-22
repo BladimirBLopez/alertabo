@@ -297,8 +297,8 @@ h1, h2, h3, h4 {
 
 /* ---- Botón "llamativo": para invitar a reportar, con pulso sutil ---- */
 @keyframes pulso-atencion {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 29, 37, 0.45); }
-  50% { box-shadow: 0 0 0 9px rgba(200, 29, 37, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 29, 37, 0.6); transform: scale(1); }
+  50% { box-shadow: 0 0 0 12px rgba(200, 29, 37, 0); transform: scale(1.04); }
 }
 
 .boton--llamativo {
@@ -313,3 +313,70 @@ h1, h2, h3, h4 {
 @media (prefers-reduced-motion: reduce) {
   .boton--llamativo { animation: none; }
 }
+
+/* =====================================================================
+   FRANJA DE CONFIANZA — debajo del hero, refuerza credibilidad
+   ===================================================================== */
+.franja-confianza {
+  background: var(--masthead-bg);
+  padding: var(--space-8) 0;
+}
+
+.franja-confianza__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+.franja-confianza__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.franja-confianza__icono {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.franja-confianza__titulo {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: #fff;
+}
+
+.franja-confianza__subtitulo {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.6);
+}
+
+@media (max-width: 720px) {
+  .franja-confianza__grid { grid-template-columns: 1fr; gap: var(--space-4); }
+}
+
+/* ---- Botón Reportar del header: mas grande y prominente ---- */
+.encabezado__acciones .boton--llamativo {
+  padding: var(--space-3) var(--space-5);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 420px) {
+  .encabezado__acciones .boton--llamativo { padding: var(--space-2) var(--space-4); font-size: 0.62rem; }
+}
+
+/* ---- CTA final: bloque solido, no tarjeta con borde ---- */
+.cta-final {
+  background: var(--masthead-bg);
+  border: none;
+  color: #fff;
+}
+
+.cta-final h2 { color: #fff; }
+.cta-final p { color: rgba(255,255,255,0.7); }
