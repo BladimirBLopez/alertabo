@@ -1,12 +1,13 @@
 /* =====================================================================
    ALERTABO — DESIGN TOKENS
    =====================================================================
-   Estilo: "masthead" editorial — header negro sólido, rojo como acento
-   de alerta, blanco de fondo. Bordes definidos, sin sombras difusas.
+   Estilo: "gaceta institucional" — papel cálido, serif editorial,
+   rojo de alerta serio + azul institucional como acento de confianza.
+   No es una app de "startup", es un boletín público.
    ===================================================================== */
 
 :root {
-  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Georgia', serif;
   --font-body: 'Inter', 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
@@ -15,10 +16,10 @@
   --text-base: 1rem;
   --text-lg: 1.1rem;
   --text-xl: 1.3rem;
-  --text-2xl: 1.6rem;
-  --text-3xl: 2rem;
-  --text-4xl: 2.5rem;
-  --text-5xl: 3.2rem;
+  --text-2xl: 1.7rem;
+  --text-3xl: 2.15rem;
+  --text-4xl: 2.75rem;
+  --text-5xl: 3.4rem;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -31,75 +32,91 @@
   --space-24: 6rem;
   --space-32: 8rem;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
   --radius-full: 999px;
 
-  --shadow-sm: 0 1px 0 rgba(20, 10, 10, 0.05);
-  --shadow-md: 0 2px 0 rgba(20, 10, 10, 0.08);
-  --shadow-lg: 0 3px 0 rgba(20, 10, 10, 0.1);
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.06);
+  --shadow-md: 0 4px 12px rgba(28, 25, 23, 0.08);
+  --shadow-lg: 0 12px 32px rgba(28, 25, 23, 0.12);
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 150ms var(--ease);
   --transition-base: 260ms var(--ease);
   --transition-slow: 420ms var(--ease);
 
-  --brand-50:  #fdf1f1;
-  --brand-200: #f6b8bb;
-  --brand-400: #e0454e;
-  --brand-500: #d92330;
-  --brand-600: #c81d25;
-  --brand-700: #a01620;
+  --brand-50:  #fbeae8;
+  --brand-200: #e8b3ac;
+  --brand-400: #c8564a;
+  --brand-500: #b3362b;
+  --brand-600: #9c2a20;
+  --brand-700: #7a1f17;
 
-  --risk-safe-bg: #e7f6ef;
-  --risk-safe-fg: #157a52;
-  --risk-safe-dot: #1fa971;
+  --ink-50:  #e8eef3;
+  --ink-400: #35547a;
+  --ink-500: #24405e;
+  --ink-600: #1e3a5f;
+  --ink-700: #142a45;
 
-  --risk-warn-bg: #fff3e0;
-  --risk-warn-fg: #a9600a;
-  --risk-warn-dot: #f5a623;
+  --risk-safe-bg: #e6f1ea;
+  --risk-safe-fg: #1f6b45;
+  --risk-safe-dot: #2d8a5b;
 
-  --risk-high-bg: #fff1eb;
-  --risk-high-fg: #c2410c;
-  --risk-high-dot: #f97316;
+  --risk-warn-bg: #f7ecd9;
+  --risk-warn-fg: #8a5a12;
+  --risk-warn-dot: #c17f1f;
 
-  --bg: #ffffff;
+  --risk-high-bg: var(--brand-50);
+  --risk-high-fg: var(--brand-600);
+  --risk-high-dot: var(--brand-500);
+
+  --bg: #faf9f7;
   --bg-elevated: #ffffff;
-  --bg-subtle: #f7f7f7;
-  --border: #1a1414;
-  --border-suave: #dcdcdc;
-  --text-primary: #14100f;
-  --text-secondary: #514747;
-  --text-tertiary: #857a7a;
+  --bg-subtle: #f1ede6;
+  --bg-papel: #f4f1ea;
+  --border: #1c1917;
+  --border-suave: #e2ddd3;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-tertiary: #8c847a;
 
-  --masthead-bg: #14100f;
-  --masthead-fg: #ffffff;
+  --masthead-bg: #1c1917;
+  --masthead-fg: #faf9f7;
 }
 
 [data-theme="dark"] {
-  --bg: #0b0d10;
-  --bg-elevated: #14171c;
-  --bg-subtle: #1a1e24;
-  --border: #f2f3f5;
-  --border-suave: #33383f;
-  --text-primary: #f2f3f5;
-  --text-secondary: #a6acb8;
-  --text-tertiary: #6b7280;
+  --bg: #16140f;
+  --bg-elevated: #201d17;
+  --bg-subtle: #292420;
+  --bg-papel: #201d17;
+  --border: #f2ede4;
+  --border-suave: #3a342c;
+  --text-primary: #f2ede4;
+  --text-secondary: #b3aa9c;
+  --text-tertiary: #7d7568;
 
-  --risk-safe-bg: rgba(31, 169, 113, 0.12);
-  --risk-safe-fg: #4fd39a;
+  --brand-400: #e0756a;
+  --brand-500: #d1584a;
+  --brand-600: #c8564a;
 
-  --risk-warn-bg: rgba(245, 166, 35, 0.12);
-  --risk-warn-fg: #f5a623;
+  --ink-400: #6d8fb5;
+  --ink-500: #5a7ba3;
+  --ink-600: #a7c4e0;
 
-  --risk-high-bg: rgba(249, 115, 22, 0.12);
-  --risk-high-fg: #fb923c;
+  --risk-safe-bg: rgba(45, 138, 91, 0.15);
+  --risk-safe-fg: #5cc491;
 
-  --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 3px 0 rgba(0, 0, 0, 0.4);
+  --risk-warn-bg: rgba(193, 127, 31, 0.15);
+  --risk-warn-fg: #d9a24d;
 
-  --masthead-bg: #000000;
-  --masthead-fg: #ffffff;
+  --risk-high-bg: rgba(200, 86, 74, 0.15);
+  --risk-high-fg: #e0756a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  --masthead-bg: #0d0b08;
+  --masthead-fg: #f2ede4;
 }
