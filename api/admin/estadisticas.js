@@ -2,7 +2,7 @@
  * GET /api/admin/estadisticas
  * Contadores para las tarjetas del dashboard.
  */
-const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
+const { consultar } = require('../../services/db');
 const { requiereAdmin } = require('../../utils/authAdmin');
 
 module.exports = async (req, res) => {
@@ -11,19 +11,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const supabase = obtenerClienteSupabaseAdmin();
-
-  const [totalRes, pendientesRes, aprobadosRes, rechazadosRes] = await Promise.all([
-    supabase.from('reportes').select('id', { count: 'exact', head: true }),
-    supabase.from('reportes').select('id', { count: 'exact', head: true }).eq('estado', 'pendiente'),
-    supabase.from('reportes').select('id', { count: 'exact', head: true }).eq('estado', 'aprobado'),
-    supabase.from('reportes').select('id', { count: 'exact', head: true }).eq('estado', 'rechazado'),
-  ]);
-
-  res.status(200).json({
-    total: totalRes.count || 0,
-    pendientes: pendientesRes.count || 0,
-    aprobados: aprobadosRes.count || 0,
-    rechazados: rechazadosRes.count || 0,
-  });
+  try {
+    const filas = await consultar(
+      `SELECT
+         count(*)::int AS total,
+         count(*) FILTER (WHERE estado = 'pendiente')::int AS pendientes,
+         count(*) FILTER (WHERE estado = 'aprobado')::int AS aprobados,
+         count(*) FILTER (WHERE estado = 'rechazado')::int AS rechazados
+       FROM reportes`
+    );
+    res.status(200).json(filas[0]);
+  } catch (error) {
+    console.error('[AlertaBo] Error en estadisticas:', error);
+    res.status(500).json({ error: 'Error al obtener estadísticas' });
+  }
 };

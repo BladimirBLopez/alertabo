@@ -18,6 +18,7 @@
   const editarDescripcion = document.getElementById('editarDescripcion');
 
   const ETIQUETAS_ESTADO = { pendiente: 'Pendiente', aprobado: 'Aprobado', rechazado: 'Rechazado' };
+  let reportesCargados = {};
 
   async function verificarSesion() {
     const respuesta = await fetch('/api/admin/verificar');
@@ -58,6 +59,8 @@
         return;
       }
 
+      reportesCargados = {};
+      datos.reportes.forEach((r) => { reportesCargados[r.id] = r; });
       listaAdmin.innerHTML = datos.reportes.map(renderizarReporte).join('');
       adjuntarEventosAcciones();
     } catch (error) {
@@ -79,16 +82,26 @@
           <span class="badge-estado badge-estado--${r.estado}">${ETIQUETAS_ESTADO[r.estado]}</span>
         </div>
         <p class="reporte-admin__descripcion">${escapar(r.descripcion)}</p>
+        ${renderizarCapturas(r.imagenes)}
         <div class="reporte-admin__acciones">
           ${r.estado !== 'aprobado' ? `<button class="boton-mini boton-mini--aprobar" data-accion="aprobar" data-id="${r.id}">Aprobar</button>` : ''}
           ${r.estado !== 'rechazado' ? `<button class="boton-mini boton-mini--rechazar" data-accion="rechazar" data-id="${r.id}">Rechazar</button>` : ''}
-          <button class="boton-mini" data-accion="editar" data-id="${r.id}"
-            data-nombre="${escapar(r.nombre_negocio || '')}" data-ciudad="${escapar(r.ciudad || '')}"
-            data-motivo="${escapar(r.motivo || '')}" data-descripcion="${escapar(r.descripcion || '')}">Editar</button>
+          <button class="boton-mini" data-accion="editar" data-id="${r.id}">Editar</button>
           <button class="boton-mini boton-mini--eliminar" data-accion="eliminar" data-id="${r.id}">Eliminar</button>
         </div>
       </div>
     `;
+  }
+
+  function renderizarCapturas(imagenes) {
+    const validas = (imagenes || []).filter(
+      (i) => i && typeof i.url === 'string' && i.url.startsWith('https://res.cloudinary.com/')
+    );
+    if (validas.length === 0) return '';
+    const miniaturas = validas.map((i) =>
+      `<a href="${i.url}" target="_blank" rel="noopener noreferrer"><img src="${i.url}" alt="Captura del reporte" loading="lazy" style="height:90px;width:auto;border-radius:8px;border:1px solid #ddd;"></a>`
+    ).join('');
+    return `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">${miniaturas}</div>`;
   }
 
   function escapar(texto) {
@@ -109,10 +122,11 @@
 
     if (accion === 'editar') {
       editarId.value = id;
-      editarNombreNegocio.value = boton.dataset.nombre;
-      editarCiudad.value = boton.dataset.ciudad;
-      editarMotivo.value = boton.dataset.motivo;
-      editarDescripcion.value = boton.dataset.descripcion;
+      const actual = reportesCargados[id] || {};
+      editarNombreNegocio.value = actual.nombre_negocio || '';
+      editarCiudad.value = actual.ciudad || '';
+      editarMotivo.value = actual.motivo || '';
+      editarDescripcion.value = actual.descripcion || '';
       modalEditar.classList.add('visible');
       return;
     }

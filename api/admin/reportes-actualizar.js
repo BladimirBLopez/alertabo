@@ -3,9 +3,19 @@
  * body: { id, accion: 'aprobar'|'rechazar'|'eliminar'|'editar', motivo_rechazo?, cambios? }
  * Requiere sesión de admin.
  */
-const { obtenerClienteSupabaseAdmin } = require('../../services/supabaseAdmin');
+const { consultar } = require('../../services/db');
+const { eliminarImagen } = require('../../services/cloudinary');
 const { requiereAdmin } = require('../../utils/authAdmin');
-const { sanitizarTexto } = require('../../utils/validacionServidor');
+const { MOTIVOS_REPORTE } = require('../../config/constantes');
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function limpiar(texto, max) {
+  return String(texto || '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+    .trim()
+    .slice(0, max);
+}
 
 module.exports = async (req, res) => {
   if (!requiereAdmin(req)) {
@@ -18,50 +28,66 @@ module.exports = async (req, res) => {
   }
 
   const { id, accion, motivo_rechazo, cambios } = req.body || {};
-  if (!id || !accion) {
+  if (!id || !accion || !UUID.test(String(id))) {
     res.status(400).json({ error: 'Faltan parámetros' });
     return;
   }
 
-  const supabase = obtenerClienteSupabaseAdmin();
+  try {
+    let filas;
 
-  if (accion === 'aprobar') {
-    const { error } = await supabase
-      .from('reportes')
-      .update({ estado: 'aprobado', revisado_en: new Date().toISOString() })
-      .eq('id', id);
-    if (error) { res.status(500).json({ error: 'Error al aprobar' }); return; }
+    if (accion === 'aprobar') {
+      filas = await consultar(
+        `UPDATE reportes SET estado = 'aprobado', motivo_rechazo = NULL, revisado_en = now()
+         WHERE id = $1 RETURNING id`,
+        [id]
+      );
 
-  } else if (accion === 'rechazar') {
-    const { error } = await supabase
-      .from('reportes')
-      .update({
-        estado: 'rechazado',
-        motivo_rechazo: sanitizarTexto(String(motivo_rechazo || '')).slice(0, 300),
-        revisado_en: new Date().toISOString(),
-      })
-      .eq('id', id);
-    if (error) { res.status(500).json({ error: 'Error al rechazar' }); return; }
+    } else if (accion === 'rechazar') {
+      filas = await consultar(
+        `UPDATE reportes SET estado = 'rechazado', motivo_rechazo = $2, revisado_en = now()
+         WHERE id = $1 RETURNING id`,
+        [id, limpiar(motivo_rechazo, 300)]
+      );
 
-  } else if (accion === 'eliminar') {
-    const { error } = await supabase.from('reportes').delete().eq('id', id);
-    if (error) { res.status(500).json({ error: 'Error al eliminar' }); return; }
+    } else if (accion === 'eliminar') {
+      const imagenes = await consultar('SELECT public_id FROM imagenes WHERE reporte_id = $1', [id]);
+      filas = await consultar('DELETE FROM reportes WHERE id = $1 RETURNING id', [id]);
+      for (const img of imagenes) {
+        if (!img.public_id) continue;
+        try { await eliminarImagen(img.public_id); } catch (e) { console.error('[AlertaBo] No se borró imagen:', e.message); }
+      }
 
-  } else if (accion === 'editar') {
-    const permitido = {};
-    if (cambios?.ciudad) permitido.ciudad = sanitizarTexto(String(cambios.ciudad)).slice(0, 80);
-    if (cambios?.descripcion) permitido.descripcion = sanitizarTexto(String(cambios.descripcion)).slice(0, 1500);
-    if (cambios?.motivo) permitido.motivo = sanitizarTexto(String(cambios.motivo)).slice(0, 80);
-    if (cambios?.nombre_negocio !== undefined) {
-      permitido.nombre_negocio = sanitizarTexto(String(cambios.nombre_negocio || '')).slice(0, 120);
+    } else if (accion === 'editar') {
+      const c = cambios || {};
+      const ciudad = limpiar(c.ciudad, 80) || null;
+      const descripcion = limpiar(c.descripcion, 1500) || null;
+      const motivo = MOTIVOS_REPORTE.includes(c.motivo) ? c.motivo : null;
+      const cambiaNombre = c.nombre_negocio !== undefined;
+      const nombre = cambiaNombre ? (limpiar(c.nombre_negocio, 120) || null) : null;
+
+      filas = await consultar(
+        `UPDATE reportes SET
+           ciudad = COALESCE($2, ciudad),
+           descripcion = COALESCE($3, descripcion),
+           motivo = COALESCE($4, motivo),
+           nombre_negocio = CASE WHEN $5::boolean THEN $6::text ELSE nombre_negocio END
+         WHERE id = $1 RETURNING id`,
+        [id, ciudad, descripcion, motivo, cambiaNombre, nombre]
+      );
+
+    } else {
+      res.status(400).json({ error: 'Acción inválida' });
+      return;
     }
-    const { error } = await supabase.from('reportes').update(permitido).eq('id', id);
-    if (error) { res.status(500).json({ error: 'Error al editar' }); return; }
 
-  } else {
-    res.status(400).json({ error: 'Acción inválida' });
-    return;
+    if (!filas || filas.length === 0) {
+      res.status(404).json({ error: 'Reporte no encontrado' });
+      return;
+    }
+    res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error('[AlertaBo] Error en reportes-actualizar:', error);
+    res.status(500).json({ error: 'Error al procesar la acción' });
   }
-
-  res.status(200).json({ ok: true });
 };
